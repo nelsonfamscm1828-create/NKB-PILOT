@@ -149,7 +149,7 @@ footer {
 
     <div class="section">
         <h3>Inventory Summary</h3>
-        <p>Total Products: 0</p>
+        <p>In stock: 0</p>
         <p>Low Stock: 0</p>
         <p>Out of Stock: 0</p>
     </div>
@@ -159,6 +159,31 @@ footer {
 <footer>
     NKB PILOT © 2026 | Business Management System
 </footer>
+<script>
+async function loadBusinessData() {
+    const files = [
+        "products",
+        "sales",
+        "inventory",
+        "expenses",
+        "customers",
+        "suppliers",
+        "cash",
+        "reports"
+    ];
 
+    for (const file of files) {
+        try {
+            const response = await fetch(data/${file}.csv);
+            const data = await response.text();
+            console.log(file, data);
+        } catch (error) {
+            console.error("Error loading " + file, error);
+        }
+    }
+}
+
+loadBusinessData();
+</script>
 </body>
 </html>
