@@ -160,26 +160,166 @@ footer {
     NKB PILOT © 2026 | Business Management System
 </footer>
 <script>
-async function loadBusinessData() {
-    const files = [
-        "products",
-        "sales",
-        "inventory",
-        "expenses",
-        "customers",
-        "suppliers",
-        "cash",
-        "reports"
-    ];
+function parseCSV(text) {
+    const rows = [];
+    let row = [];
+    let value = "";
+    let quoted = false;
 
-    for (const file of files) {
-        try {
-            const response = await fetch(data/${file}.csv);
-            const data = await response.text();
-            console.log(file, data);
-        } catch (error) {
-            console.error("Error loading " + file, error);
+    for (let i = 0; i < text.length; i++) {
+        const c = text[i];
+
+        if (c === '"') {
+            if (quoted && text[i + 1] === '"') {
+                value += '"';
+                i++;
+            } else {
+                quoted = !quoted;
+            }
+        } else if (c === "," && !quoted) {
+            row.push(value.trim());
+            value = "";
+        } else if ((c === "\n" || c === "\r") && !quoted) {
+            if (value || row.length) {
+                row.push(value.trim());
+                rows.push(row);
+            }
+            row = [];
+            value = "";
+        } else {
+            value += c;
         }
+    }
+
+    if (value || row.length) {
+        row.push(value.trim());
+        rows.push(row);
+    }
+
+    const headers = rows.shift().map(h => h.trim().toLowerCase());
+
+   return rows.map(r => {
+    const item = {};
+    headers.forEach((h, i) => item[h] = (r[i] || "").trim());
+    return item;
+}).filter(item => Object.values(item).some(value => value !== ""));
+}
+
+function number(value) {
+    return Number(String(value || "0").replace(/,/g, "")) || 0;
+}
+
+function formatMoney(amount, currency) {
+    return amount.toLocaleString() + " " + currency;
+}
+
+async function loadBusinessData() {
+    try {
+        const responses = await Promise.all([
+    fetch("data/Sales.csv"),
+    fetch("data/Expenses.csv"),
+    fetch("data/Cash.csv"),
+    fetch("data/Inventory.csv")
+]);
+
+const [salesText, expensesText, cashText, inventoryText] =
+    await Promise.all(responses.map(response => {
+        if (!response.ok) {
+            throw new Error("Could not load a CSV file");
+        }
+        return response.text();
+    }));
+
+        const sales = parseCSV(salesText);
+        const expenses = parseCSV(expensesText);
+        const cash = parseCSV(cashText);
+        const inventory = parseCSV(inventoryText);
+
+        const totalByCurrency = (records, amountField) => {
+            const totals = {};
+
+            records.forEach(record => {
+                const currency = record.currency || "SSP";
+                totals[currency] =
+                    (totals[currency] || 0) +
+                    number(record[amountField]);
+            });
+
+            return totals;
+        };
+
+        const salesTotals = totalByCurrency(sales, "total amount");
+        const expenseTotals = totalByCurrency(expenses, "amount");
+
+        const displayTotals = totals =>
+            Object.entries(totals)
+                .map(([currency, amount]) =>
+                    formatMoney(amount, currency))
+                .join(" / ") || "0 SSP";
+
+        const profitTotals = {};
+
+        Object.keys(salesTotals).forEach(currency => {
+            if (currency in expenseTotals) {
+                profitTotals[currency] =
+                    salesTotals[currency] - expenseTotals[currency];
+            }
+        });
+
+        const totalCashIn = cash.reduce(
+            (sum, item) => sum + number(item["cash in"]), 0);
+
+        const totalCashOut = cash.reduce(
+            (sum, item) => sum + number(item["cash out"]), 0);
+
+        const cashBalance = totalCashIn - totalCashOut;
+
+        const inStock = inventory.filter(
+            item => number(item["current stock"]) > 0 &&
+            number(item["current stock"]) >
+            number(item["reorder level"])
+        ).length;
+
+        const lowStock = inventory.filter(
+            item => number(item["current stock"]) > 0 &&
+            number(item["current stock"]) <=
+            number(item["reorder level"])
+        ).length;
+
+        const outStock = inventory.filter(
+            item => number(item["current stock"]) <= 0
+        ).length;
+
+        const profitMargin = Object.keys(profitTotals).length === 1
+            ? (profitTotals[Object.keys(profitTotals)[0]] /
+               salesTotals[Object.keys(profitTotals)[0]]) * 100
+            : null;
+
+        const cards = document.querySelectorAll(".card p");
+
+        cards[0].textContent = displayTotals(salesTotals);
+        cards[1].textContent = displayTotals(expenseTotals);
+        cards[2].textContent = displayTotals(profitTotals);
+        cards[3].textContent = formatMoney(cashBalance, "SSP");
+        cards[4].textContent = sales.length;
+        cards[5].textContent = expenses.length;
+        cards[6].textContent = Number.isFinite(profitMargin)
+            ? profitMargin.toFixed(1) + "%"
+            : "See currency totals";
+        cards[7].textContent = inStock;
+
+        const summary = document.querySelector(".section");
+        summary.querySelectorAll("p")[0].textContent =
+            "In stock: " + inStock;
+        summary.querySelectorAll("p")[1].textContent =
+            "Low Stock: " + lowStock;
+        summary.querySelectorAll("p")[2].textContent =
+            "Out of Stock: " + outStock;
+
+        console.log("NKB PILOT data loaded successfully.");
+
+    } catch (error) {
+        console.error("Dashboard loading error:", error);
     }
 }
 
