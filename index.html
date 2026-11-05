@@ -229,6 +229,41 @@ footer {
 
     </form>
 </div>
+<div class="section">
+    <h3>New Purchase Entry</h3>
+
+    <form id="purchaseForm">
+
+        <label>Purchase ID</label>
+        <input type="text" id="purchaseId" readonly>
+
+        <label>Date</label>
+        <input type="date" id="purchaseDate" required>
+
+        <label>Supplier</label>
+        <input type="text" id="purchaseSupplier" required>
+
+        <label>Product</label>
+        <input type="text" id="purchaseProduct" required>
+
+        <label>Quantity Purchased</label>
+        <input type="number" id="purchaseQuantity" min="1" required>
+
+        <label>Buying Price</label>
+        <input type="number" id="purchasePrice" min="1" required>
+
+        <label>Total Amount</label>
+        <input type="number" id="purchaseTotal" readonly>
+
+        <label>Currency</label>
+        <select id="purchaseCurrency">
+            <option value="SSP">SSP</option>
+            <option value="USD">USD</option>
+        </select>
+
+        <button type="submit">Save Purchase</button>
+    </form>
+</div>
 <footer>
     NKB PILOT © 2026 | Business Management System
 </footer>
@@ -286,6 +321,10 @@ function formatMoney(amount, currency) {
     return amount.toLocaleString() + " " + currency;
 }
 async function setupSalesForm() {
+    document.getElementById("purchaseId").value = "PUR001";
+
+document.getElementById("purchaseDate").value =
+    new Date().toLocaleDateString("en-CA");
     document.getElementById("expenseId").value = "EXP004";
 
 document.getElementById("expenseDate").value =
