@@ -190,6 +190,45 @@ footer {
         <button type="submit">Save Sale</button>
     </form>
 </div>
+<div class="section">
+    <h3>New Expense Entry</h3>
+
+    <form id="expenseForm">
+
+        <label>Expense ID</label>
+        <input type="text" id="expenseId" readonly>
+
+        <label>Date</label>
+        <input type="date" id="expenseDate" required>
+
+        <label>Expense Category</label>
+        <select id="expenseCategory" required>
+            <option value="">Select Category</option>
+            <option>Rent</option>
+            <option>Transport</option>
+            <option>Feeding</option>
+            <option>Salaries</option>
+            <option>Utilities</option>
+            <option>Purchases</option>
+            <option>Other</option>
+        </select>
+
+        <label>Description</label>
+        <input type="text" id="expenseDescription">
+
+        <label>Amount</label>
+        <input type="number" id="expenseAmount" min="1" required>
+
+        <label>Currency</label>
+        <select id="expenseCurrency">
+            <option value="SSP">SSP</option>
+            <option value="USD">USD</option>
+        </select>
+
+        <button type="submit">Save Expense</button>
+
+    </form>
+</div>
 <footer>
     NKB PILOT © 2026 | Business Management System
 </footer>
@@ -247,6 +286,10 @@ function formatMoney(amount, currency) {
     return amount.toLocaleString() + " " + currency;
 }
 async function setupSalesForm() {
+    document.getElementById("expenseId").value = "EXP004";
+
+document.getElementById("expenseDate").value =
+    new Date().toLocaleDateString("en-CA");
     const response = await fetch("data/Products.csv");
     const text = await response.text();
     const products = parseCSV(text);
