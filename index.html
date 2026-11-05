@@ -155,7 +155,41 @@ footer {
     </div>
 
 </div>
+<div class="section">
+    <h3>New Sales Entry</h3>
+    <form id="salesForm">
+        <label>Sales ID</label>
+        <input type="text" id="salesId" readonly>
 
+        <label>Date</label>
+        <input type="date" id="salesDate" required>
+
+        <label>Product</label>
+        <select id="salesProduct" required>
+            <option value="">Select Product</option>
+        </select>
+
+        <label>Barcode</label>
+        <input type="text" id="salesBarcode" readonly>
+
+        <label>Quantity Sold</label>
+        <input type="number" id="salesQuantity" min="1" required>
+
+        <label>Selling Price</label>
+        <input type="number" id="salesPrice" readonly>
+
+        <label>Total Amount</label>
+        <input type="number" id="salesTotal" readonly>
+
+        <label>Currency</label>
+        <select id="salesCurrency">
+            <option value="SSP">SSP</option>
+            <option value="USD">USD</option>
+        </select>
+
+        <button type="submit">Save Sale</button>
+    </form>
+</div>
 <footer>
     NKB PILOT © 2026 | Business Management System
 </footer>
@@ -212,7 +246,59 @@ function number(value) {
 function formatMoney(amount, currency) {
     return amount.toLocaleString() + " " + currency;
 }
+async function setupSalesForm() {
+    const response = await fetch("data/Products.csv");
+    const text = await response.text();
+    const products = parseCSV(text);
 
+    const productSelect = document.getElementById("salesProduct");
+
+    products.forEach(product => {
+        if (product["product name"]) {
+            const option = document.createElement("option");
+            option.value = product["product name"];
+            option.textContent = product["product name"];
+            productSelect.appendChild(option);
+        }
+    });
+
+    productSelect.addEventListener("change", () => {
+        const product = products.find(
+            p => p["product name"] === productSelect.value
+        );
+
+        document.getElementById("salesBarcode").value =
+            product ? product.barcode : "";
+
+        document.getElementById("salesPrice").value =
+            product ? Number(product["selling price"].replace(/,/g, "")) : "";
+
+        calculateSaleTotal();
+    });
+
+    document.getElementById("salesQuantity").addEventListener(
+        "input", calculateSaleTotal
+    );
+
+    document.getElementById("salesDate").value =
+        new Date().toLocaleDateString("en-CA");
+
+    document.getElementById("salesId").value = "S13";
+}
+
+function calculateSaleTotal() {
+    const quantity = Number(
+        document.getElementById("salesQuantity").value
+    );
+    const price = Number(
+        document.getElementById("salesPrice").value
+    );
+
+    document.getElementById("salesTotal").value =
+        quantity * price;
+}
+
+setupSalesForm();
 async function loadBusinessData() {
     try {
         const responses = await Promise.all([
