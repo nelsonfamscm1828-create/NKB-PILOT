@@ -329,13 +329,41 @@ footer {
     </div>
 
     <!-- INVENTORY PAGE -->
-    <div id="inventoryPage" class="page">
-        <div class="section">
-            <h3>Inventory Management</h3>
-            <p>Inventory management will be displayed here.</p>
-        </div>
+<div id="inventoryPage" class="page">
+    <div class="section">
+        <h3>Inventory Management</h3>
+
+        <form id="inventoryForm">
+            <label>Product ID</label>
+            <input type="text" id="productId" placeholder="Enter product ID" required>
+
+            <label>Product Name</label>
+            <input type="text" id="productName" placeholder="Enter product name" required>
+
+            <label>Barcode</label>
+            <input type="text" id="productBarcode" placeholder="Enter or scan barcode">
+
+            <label>Buying Price</label>
+            <input type="number" id="buyingPrice" placeholder="Enter buying price" min="0" step="0.01" required>
+
+            <label>Selling Price</label>
+            <input type="number" id="sellingPrice" placeholder="Enter selling price" min="0" step="0.01" required>
+
+            <label>Opening Stock</label>
+            <input type="number" id="openingStock" placeholder="Enter quantity" min="0" required>
+
+            <label>Reorder Level</label>
+            <input type="number" id="reorderLevel" placeholder="Enter reorder level" min="0" required>
+
+            <button type="submit">Save Product</button>
+        </form>
     </div>
 
+    <div class="section">
+        <h3>Inventory Records</h3>
+       <div id="inventoryRecords"></div>
+    </div>
+</div>
     <!-- REPORTS PAGE -->
     <div id="reportsPage" class="page">
         <div class="section">
@@ -415,6 +443,77 @@ function number(value) {
 function formatMoney(amount, currency) {
     return amount.toLocaleString() + " " + currency;
 }
+// INVENTORY FORM
+const inventoryForm = document.getElementById("inventoryForm");
+const inventoryRecords = document.getElementById("inventoryRecords");
+
+function displayInventoryRecords() {
+    const products = JSON.parse(
+        localStorage.getItem("nkbProducts") || "[]"
+    );
+
+    inventoryRecords.innerHTML = "";
+
+    const table = document.createElement("table");
+    table.innerHTML = `
+        <tr>
+            <th>Product ID</th>
+            <th>Product Name</th>
+            <th>Barcode</th>
+            <th>Current Stock</th>
+            <th>Status</th>
+        </tr>
+    `;
+
+    products.forEach(product => {
+        const status = product.stock <= 0
+            ? "Out of Stock"
+            : product.stock <= product.reorder
+            ? "Low Stock"
+            : "In Stock";
+
+        const row = table.insertRow();
+
+        [
+            product.id,
+            product.name,
+            product.barcode,
+            product.stock,
+            status
+        ].forEach(value => {
+            row.insertCell().textContent = value;
+        });
+    });
+
+    inventoryRecords.appendChild(table);
+}
+
+inventoryForm.addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const products = JSON.parse(
+        localStorage.getItem("nkbProducts") || "[]"
+    );
+
+    products.push({
+        id: document.getElementById("productId").value,
+        name: document.getElementById("productName").value,
+        barcode: document.getElementById("productBarcode").value,
+        buying: Number(document.getElementById("buyingPrice").value),
+        selling: Number(document.getElementById("sellingPrice").value),
+        stock: Number(document.getElementById("openingStock").value),
+        reorder: Number(document.getElementById("reorderLevel").value)
+    });
+
+    localStorage.setItem("nkbProducts", JSON.stringify(products));
+
+    inventoryForm.reset();
+    displayInventoryRecords();
+
+    alert("Product saved successfully!");
+});
+
+displayInventoryRecords();
 async function setupSalesForm() {
     document.getElementById("purchaseId").value = "PUR001";
 
