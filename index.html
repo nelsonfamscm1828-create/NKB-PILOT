@@ -198,7 +198,8 @@ footer {
             <canvas id="performanceChart"></canvas>
         </div>
 
-        <div class="section">
+        <div class="section" 
+        id="inventorySummary">
             <h3>Inventory Summary</h3>
             <p>In stock: 0</p>
             <p>Low Stock: 0</p>
@@ -570,13 +571,15 @@ const [salesText, expensesText, cashText, inventoryText] =
             : "See currency totals";
         cards[7].textContent = inStock;
 
-        const summary = document.querySelector(".section");
-        summary.querySelectorAll("p")[0].textContent =
-            "In stock: " + inStock;
-        summary.querySelectorAll("p")[1].textContent =
-            "Low Stock: " + lowStock;
-        summary.querySelectorAll("p")[2].textContent =
-            "Out of Stock: " + outStock;
+      const summary = document.getElementById("inventorySummary");
+summary.querySelectorAll("p")[0].textContent =
+    "In stock: " + inStock;
+
+summary.querySelectorAll("p")[1].textContent =
+    "Low Stock: " + lowStock;
+
+summary.querySelectorAll("p")[2].textContent =
+    "Out of Stock: " + outStock;
 // BUSINESS PERFORMANCE CHART
 const performanceLabels = [];
 const performanceValues = [];
