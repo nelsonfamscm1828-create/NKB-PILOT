@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NKB PILOT - Settings</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f5f8;
+    color: #263247;
+}
+
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background: #101d35;
+    color: white;
+    position: fixed;
+    padding: 25px 15px;
+}
+
+.logo {
+    color: #d6ad52;
+    font-size: 23px;
+    font-weight: bold;
+    margin-bottom: 35px;
+}
+
+.sidebar a {
+    display: block;
+    color: #dce3ef;
+    text-decoration: none;
+    padding: 12px;
+    margin-bottom: 5px;
+    border-radius: 6px;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+    background: #d6ad52;
+    color: #101d35;
+}
+
+.main {
+    margin-left: 250px;
+    padding: 30px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    font-size: 26px;
+}
+
+.section {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px #0000000c;
+}
+
+.section h2 {
+    margin-bottom: 10px;
+    color: #101d35;
+}
+
+.section p {
+    color: #6b7280;
+    margin-bottom: 20px;
+}
+
+.settings-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+}
+
+.setting-card {
+    border: 1px solid #e2e5eb;
+    padding: 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.setting-card:hover {
+    border-color: #d6ad52;
+    background: #fffdf7;
+}
+
+.setting-card h3 {
+    color: #101d35;
+    font-size: 15px;
+    margin-bottom: 8px;
+}
+
+.setting-card span {
+    color: #7b8493;
+    font-size: 13px;
+}
+
+@media(max-width: 700px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+    .main {
+        margin-left: 0;
+        padding: 15px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<aside class="sidebar">
+    <div class="logo">NKB PILOT</div>
+    <a href="index.html">Dashboard</a>
+    <a href="#" class="active">Settings</a>
+</aside>
+
+<main class="main">
+    <div class="header">
+        <h1>System Settings</h1>
+        <span>Administration</span>
+    </div>
+
+    <div class="section">
+        <h2>System Configuration</h2>
+        <p>Manage and customize your business management system.</p>
+
+        <div class="settings-list" id="settingsList"></div>
+    </div>
+</main>
+
+<script>
+const settings = [
+"General Settings",
+"Business Profile",
+"Regional Settings",
+"Currency Settings",
+"User Management",
+"Roles and Permissions",
+"Security Settings",
+"Barcode Settings",
+"Inventory Settings",
+"Sales Settings",
+"Purchases Settings",
+"SMS and Notifications",
+"Google Sheets Integration",
+"Reports Settings",
+"Database Settings",
+"Backup and Restore",
+"Appearance and Maintenance",
+"Subscription, Branches and Audit"
+];
+
+const descriptions = [
+"Configure system preferences",
+"Manage business information",
+"Set language, date and time",
+"Manage SSP, USD and currencies",
+"Manage system users",
+"Control user access",
+"Manage system security",
+"Configure product barcodes",
+"Manage stock preferences",
+"Configure sales operations",
+"Configure purchasing operations",
+"Manage alerts and messages",
+"Manage data synchronization",
+"Configure business reports",
+"Manage system data",
+"Protect and restore information",
+"Customize system appearance",
+"Manage subscriptions and branches"
+];
+
+document.getElementById("settingsList").innerHTML =
+settings.map((name, index) => `
+<div class="setting-card">
+    <h3>${index + 1}. ${name}</h3>
+    <span>${descriptions[index]}</span>
+</div>
+`).join("");
+</script>
+
+</body>
+</html>
