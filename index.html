@@ -213,7 +213,57 @@ footer {
         grid-template-columns: 1fr;
     }
 }
+/* NKB PILOT - CONSISTENT FORM DESIGN */
+
+#customerForm,
+#salesForm,
+#expenseForm,
+#purchaseForm,
+#inventoryForm {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px 15px;
+    max-width: 850px;
+    margin-top: 12px;
+}
+
+#customerForm label,
+#salesForm label,
+#expenseForm label,
+#purchaseForm label,
+#inventoryForm label {
+    display: block;
+    margin-bottom: 3px;
+    font-weight: 600;
+}
+
+#customerForm input,
+#customerForm select,
+#salesForm input,
+#salesForm select,
+#expenseForm input,
+#expenseForm select,
+#purchaseForm input,
+#purchaseForm select,
+#inventoryForm input,
+#inventoryForm select {
+    width: 100%;
+    padding: 5px 7px;
+    height: 32px;
+    box-sizing: border-box;
+}
+
+@media (max-width: 650px) {
+    #customerForm,
+    #salesForm,
+    #expenseForm,
+    #purchaseForm,
+    #inventoryForm {
+        grid-template-columns: 1fr;
+    }
+}
 </style>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
@@ -274,121 +324,123 @@ footer {
     </div>
 
     <!-- SALES PAGE -->
-    <div id="salesPage" class="page">
-        <div class="section">
-            <h3>New Sales Entry</h3>
-            <form id="salesForm">
-                <label>Sales ID</label>
-                <input type="text" id="salesId" readonly>
+<div id="salesPage" class="page">
+    <div class="section">
+        <h3>Sales Entry</h3>
+        <form id="salesForm" class="vertical-form">
 
-                <label>Date</label>
-                <input type="date" id="salesDate" required>
+            <label>Sales ID</label>
+            <input type="text" id="salesId" readonly>
 
-                <label>Product</label>
-                <select id="salesProduct" required>
-                    <option value="">Select Product</option>
-                </select>
+            <label>Date</label>
+            <input type="date" id="salesDate" required>
 
-                <label>Barcode</label>
-                <input type="text" id="salesBarcode" readonly>
+            <label>Product</label>
+            <select id="salesProduct" required>
+                <option value="">Select Product</option>
+            </select>
 
-                <label>Quantity Sold</label>
-                <input type="number" id="salesQuantity" min="1" required>
+            <label>Barcode</label>
+            <input type="text" id="salesBarcode" readonly>
 
-                <label>Selling Price</label>
-                <input type="number" id="salesPrice" readonly>
+            <label>Quantity Sold</label>
+            <input type="number" id="salesQuantity" min="1" required>
 
-                <label>Total Amount</label>
-                <input type="number" id="salesTotal" readonly>
+            <label>Selling Price</label>
+            <input type="number" id="salesPrice" readonly>
 
-                <label>Currency</label>
-                <select id="salesCurrency">
-                    <option value="SSP">SSP</option>
-                    <option value="USD">USD</option>
-                </select>
+            <label>Total Amount</label>
+            <input type="number" id="salesTotal" readonly>
 
-                <button type="submit">Save Sale</button>
-            </form>
-        </div>
+            <label>Currency</label>
+            <select id="salesCurrency">
+                <option value="SSP">SSP</option>
+                <option value="USD">USD</option>
+            </select>
+
+            <button type="submit">Save Sale</button>
+        </form>
     </div>
+</div>
 
-    <!-- EXPENSES PAGE -->
-    <div id="expensesPage" class="page">
-        <div class="section">
-            <h3>New Expense Entry</h3>
-            <form id="expenseForm">
-                <label>Expense ID</label>
-                <input type="text" id="expenseId" readonly>
+<!-- EXPENSES PAGE -->
+<div id="expensesPage" class="page">
+    <div class="section">
+        <h3>Expense Entry</h3>
+        <form id="expenseForm" class="vertical-form">
 
-                <label>Date</label>
-                <input type="date" id="expenseDate" required>
+            <label>Expense ID</label>
+            <input type="text" id="expenseId" readonly>
 
-                <label>Expense Category</label>
-                <select id="expenseCategory" required>
-                    <option value="">Select Category</option>
-                    <option>Rent</option>
-                    <option>Transport</option>
-                    <option>Feeding</option>
-                    <option>Salaries</option>
-                    <option>Utilities</option>
-                    <option>Purchases</option>
-                    <option>Other</option>
-                </select>
+            <label>Date</label>
+            <input type="date" id="expenseDate" required>
 
-                <label>Description</label>
-                <input type="text" id="expenseDescription">
+            <label>Expense Category</label>
+            <select id="expenseCategory" required>
+                <option value="">Select Category</option>
+                <option>Rent</option>
+                <option>Transport</option>
+                <option>Feeding</option>
+                <option>Salaries</option>
+                <option>Utilities</option>
+                <option>Purchases</option>
+                <option>Other</option>
+            </select>
 
-                <label>Amount</label>
-                <input type="number" id="expenseAmount" min="1" required>
+            <label>Description</label>
+            <input type="text" id="expenseDescription">
 
-                <label>Currency</label>
-                <select id="expenseCurrency">
-                    <option value="SSP">SSP</option>
-                    <option value="USD">USD</option>
-                </select>
+            <label>Amount</label>
+            <input type="number" id="expenseAmount" min="1" required>
 
-                <button type="submit">Save Expense</button>
-            </form>
-        </div>
+            <label>Currency</label>
+            <select id="expenseCurrency">
+                <option value="SSP">SSP</option>
+                <option value="USD">USD</option>
+            </select>
+
+            <button type="submit">Save Expense</button>
+        </form>
     </div>
+</div>
 
-    <!-- PURCHASES PAGE -->
-    <div id="purchasesPage" class="page">
-        <div class="section">
-            <h3>New Purchase Entry</h3>
-            <form id="purchaseForm">
-                <label>Purchase ID</label>
-                <input type="text" id="purchaseId" readonly>
+<!-- PURCHASES PAGE -->
+<div id="purchasesPage" class="page">
+    <div class="section">
+        <h3>Purchase Entry</h3>
+        <form id="purchaseForm" class="vertical-form">
 
-                <label>Date</label>
-                <input type="date" id="purchaseDate" required>
+            <label>Purchase ID</label>
+            <input type="text" id="purchaseId" readonly>
 
-                <label>Supplier</label>
-                <input type="text" id="purchaseSupplier" required>
+            <label>Date</label>
+            <input type="date" id="purchaseDate" required>
 
-                <label>Product</label>
-                <input type="text" id="purchaseProduct" required>
+            <label>Supplier</label>
+            <input type="text" id="purchaseSupplier" required>
 
-                <label>Quantity Purchased</label>
-                <input type="number" id="purchaseQuantity" min="1" required>
+            <label>Product</label>
+            <input type="text" id="purchaseProduct" required>
 
-                <label>Buying Price</label>
-                <input type="number" id="purchasePrice" min="1" required>
+            <label>Quantity Purchased</label>
+            <input type="number" id="purchaseQuantity" min="1" required>
 
-                <label>Total Amount</label>
-                <input type="number" id="purchaseTotal" readonly>
+            <label>Buying Price</label>
+            <input type="number" id="purchasePrice" min="1" required>
 
-                <label>Currency</label>
-                <select id="purchaseCurrency">
-                    <option value="SSP">SSP</option>
-                    <option value="USD">USD</option>
-                </select>
+            <label>Total Amount</label>
+            <input type="number" id="purchaseTotal" readonly>
 
-                <button type="submit">Save Purchase</button>
-            </form>
-        </div>
+            <label>Currency</label>
+            <select id="purchaseCurrency">
+                <option value="SSP">SSP</option>
+                <option value="USD">USD</option>
+            </select>
+
+            <button type="submit">Save Purchase</button>
+        </form>
     </div>
-
+</div>
     <!-- INVENTORY PAGE -->
 <div id="inventoryPage" class="page">
     <div class="section">
@@ -438,8 +490,7 @@ footer {
 <section id="customersPage" class="page">
 
     <h2>Customer Management</h2>
-    <p>Register and manage your business customers.</p>
-
+    
     <form id="customerForm">
 
         <label>Customer ID</label>
