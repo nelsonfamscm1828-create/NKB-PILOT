@@ -153,7 +153,66 @@ footer {
         font-size: 13px;
     }
 }   
+/* CUSTOMER FORM SPACING */
 
+#customersPage {
+    padding: 25px;
+}
+
+#customerForm {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px 25px;
+    max-width: 1000px;
+    margin-top: 25px;
+}
+
+#customerForm label {
+    display: block;
+    margin-bottom: 9px;
+    font-weight: 600;
+}
+
+#customerForm input,
+#customerForm select {
+    width: 100%;
+    padding: 5px 7px;
+    height: 32px;
+    box-sizing: border-box;
+}
+
+/* CUSTOMERS FORM DESIGN */
+
+#customersPage {
+    padding: 15px;
+}
+
+#customerForm {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px 15px;
+    max-width: 850px;
+    margin-top: 12px;
+}
+
+#customerForm label {
+    display: block;
+    margin-bottom: 3px;
+    font-weight: 600;
+}
+
+#customerForm input,
+#customerForm select {
+    width: 100%;
+    padding: 7px;
+    box-sizing: border-box;
+}
+
+@media (max-width: 650px) {
+    #customerForm {
+        grid-template-columns: 1fr;
+    }
+}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -169,6 +228,7 @@ footer {
     <a href="#" onclick="showPage('salesPage')">Sales</a>
     <a href="#" onclick="showPage('expensesPage')">Expenses</a>
     <a href="#" onclick="showPage('purchasesPage')">Purchases</a>
+    <a href="#" onclick="showPage('customersPage')">Customers</a>
     <a href="#" onclick="showPage('inventoryPage')">Inventory</a>
     <a href="#" onclick="showPage('reportsPage')">Reports</a>
     <a href="Settings.html" target="_blank">Settings</a>
@@ -374,6 +434,61 @@ footer {
     </div>
 
 </div>
+<!-- CUSTOMERS FORM -->
+<section id="customersPage" class="page">
+
+    <h2>Customer Management</h2>
+    <p>Register and manage your business customers.</p>
+
+    <form id="customerForm">
+
+        <label>Customer ID</label>
+        <input type="text" id="customerId" readonly>
+
+        <label>Customer Name</label>
+        <input type="text" id="customerName" required>
+
+        <label>Phone Number</label>
+        <input type="tel" id="customerPhone">
+
+        <label>Email Address</label>
+        <input type="email" id="customerEmail">
+
+        <label>Address</label>
+        <input type="text" id="customerAddress">
+
+        <label>Customer Type</label>
+        <select id="customerType">
+            <option value="Individual">Individual</option>
+            <option value="Business">Business</option>
+        </select>
+
+        <label>Opening Balance</label>
+        <input type="number" id="customerBalance" value="0" min="0">
+
+        <label>Credit Limit</label>
+        <input type="number" id="customerCreditLimit" value="0" min="0">
+
+        <label>Currency</label>
+        <select id="customerCurrency">
+            <option value="SSP">SSP</option>
+            <option value="USD">USD</option>
+        </select>
+
+        <label>Status</label>
+        <select id="customerStatus">
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+        </select>
+
+        <button type="submit">Save Customer</button>
+        <button type="reset">Clear Form</button>
+
+    </form>
+
+   
+
+</section>
 <footer>
     NKB PILOT © 2026 | Business Management System
 </footer>
